@@ -115,7 +115,7 @@ export default function Landing() {
 
                 {/* Footer Info */}
                 <div className="mt-12 text-center text-sm text-gray-500">
-                    <p>Powered by AI Translation • Secure • HIPAA Compliant</p>
+                    <p>Made by <a href="https://myselfmankar.github.io" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Vaishnav Mankar</a></p>
                 </div>
             </motion.div>
         </div>
