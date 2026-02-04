@@ -36,9 +36,26 @@ app.add_middleware(
 # Mount Uploads (for Audio playback)
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
+import os
+from fastapi.responses import FileResponse
+
+# ... existing code ...
+
 # Include API Router
 app.include_router(api_router, prefix="/api")
 
-@app.get("/")
-def root():
-    return {"message": "Nao Medical Translation API is running"}
+# Serve React App (SPA)
+# Mount static assets (JS/CSS/Images)
+if os.path.exists("ui/dist"):
+    app.mount("/assets", StaticFiles(directory="ui/dist/assets"), name="assets")
+
+@app.get("/{full_path:path}")
+async def catch_all(full_path: str):
+    # Allow API calls to pass through (handled by include_router above, but just in case)
+    if full_path.startswith("api") or full_path.startswith("uploads"):
+        return {"error": "Not Found"}
+    
+    # Serve index.html for any other route (Client-side routing)
+    if os.path.exists("ui/dist/index.html"):
+        return FileResponse("ui/dist/index.html")
+    return {"message": "UI not built. Run 'npm run build' in /ui"}

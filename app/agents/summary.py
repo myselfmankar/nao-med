@@ -1,15 +1,7 @@
-from langchain_google_genai import ChatGoogleGenerativeAI
+from fastapi import HTTPException
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from app.core.config import get_settings
-
-settings = get_settings()
-
-llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash",
-    google_api_key=settings.GEMINI_API_KEY,
-    temperature=0.3
-)
+from app.core.llm import get_llm
 
 summary_prompt = ChatPromptTemplate.from_template(
     """
@@ -28,11 +20,10 @@ summary_prompt = ChatPromptTemplate.from_template(
     """
 )
 
-summary_chain = summary_prompt | llm | StrOutputParser()
-
-async def generate_summary(messages: list) -> str:
+async def generate_summary(messages: list, api_key: str | None = None) -> str:
     """
     Generates a medical summary from a list of message objects.
+    Accepts optional api_key for user-provided keys.
     """
     if not messages:
         return "No conversation history to summarize."
@@ -43,10 +34,19 @@ async def generate_summary(messages: list) -> str:
     ])
 
     try:
-        response = await summary_chain.ainvoke({
+        # Get LLM with specific key or default
+        llm = get_llm(api_key=api_key, model="gemini-2.5-flash", temperature=0.3)
+        
+        # Create chain dynamically
+        chain = summary_prompt | llm | StrOutputParser()
+        
+        response = await chain.ainvoke({
             "conversation_text": conversation_text
         })
         return response
     except Exception as e:
+        error_msg = str(e).lower()
+        if "429" in error_msg or "quota" in error_msg or "exhausted" in error_msg:
+             raise HTTPException(status_code=429, detail="Gemini API Quota Exceeded. Please provide a new API Key in Settings.")
         print(f"Summary Error: {e}")
         return "Failed to generate summary."
