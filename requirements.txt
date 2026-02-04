@@ -1,0 +1,20 @@
+# Backend Framework
+fastapi[standard]
+uvicorn
+python-multipart
+
+# LangChain & AI
+langchain
+langchain-openai
+langchain-google-genai
+langgraph        # For stateful agents
+
+# Database
+sqlalchemy
+aiosqlite        # Async SQLite
+
+# Utilities
+python-dotenv
+pydantic
+pydantic-settings
+httpx
