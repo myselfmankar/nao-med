@@ -2,7 +2,7 @@
 
 **Breaking Language Barriers in Healthcare with Real-time AI.**
 
-Nao Medical Translator is a real-time, HIPAA-compliant communication platform designed to bridge the gap between doctors and patients speaking different languages. Powered by **Google Gemini 1.5** and **OpenAI Whisper**, it provides seamless text and voice translation, ensuring accurate medical context is preserved.
+Nao Medical Translator is a real-time, HIPAA-compliant communication platform designed to bridge the gap between doctors and patients speaking different languages. Powered by **Google Gemini 2.5** and **OpenAI Whisper**, it provides seamless text and voice translation, ensuring accurate medical context is preserved.
 
 ---
 
@@ -11,9 +11,7 @@ Nao Medical Translator is a real-time, HIPAA-compliant communication platform de
 *   **⚡ Real-time Translation**: Instant bi-directional translation for 50+ languages.
 *   **🗣️ Voice-to-Voice**: High-fidelity audio transcription & translation using Whisper + Gemini.
 *   **🩺 Medical Accuracy**: Context-aware AI prompts tuned for healthcare scenarios.
-*   **🔄 Instant Sync**: WebSocket-powered chat ensures zero latency between Doctor and Patient screens.
 *   **📝 Automated Summaries**: One-click generation of clinical summaries available for copy-paste into EHR systems.
-*   **🔒 Secure Architecture**: Ephemeral sessions and local API key management.
 
 ---
 
