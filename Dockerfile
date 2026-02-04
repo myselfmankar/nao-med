@@ -19,7 +19,7 @@ RUN pip install uv && uv pip install --system --no-cache -r requirements.txt
 
 # Copy Backend Code
 COPY app ./app
-COPY .env .
+
 
 # Copy Built Frontend from Stage 1
 COPY --from=frontend-build /app/ui/dist ./ui/dist
