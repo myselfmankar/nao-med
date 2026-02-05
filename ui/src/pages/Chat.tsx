@@ -93,12 +93,22 @@ export default function Chat() {
     }, [searchQuery]);
 
     // WebSocket for real-time updates
+    // WebSocket for real-time updates
     useEffect(() => {
         if (!session) return;
 
+        // Use 'host' (includes port if present) instead of hardcoding :8000
+        // This ensures it works on localhost:8000 AND production domains (autodetect)
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        const wsUrl = `${protocol}//${window.location.hostname}:8000/api/ws`;
+        const wsUrl = `${protocol}//${window.location.host}/api/ws`;
         const ws = new WebSocket(wsUrl);
+
+        // Heartbeat to keep connection alive (prevent 60s load balancer timeout)
+        const pingInterval = setInterval(() => {
+            if (ws.readyState === WebSocket.OPEN) {
+                ws.send("ping");
+            }
+        }, 30000); 
 
         ws.onopen = () => {
             console.log('WebSocket connected');
@@ -107,12 +117,15 @@ export default function Chat() {
 
         ws.onmessage = (event) => {
             try {
+                // Ignore empty or keep-alive messages if any
+                if (!event.data) return;
+                
                 const data = JSON.parse(event.data);
                 if (data.type === 'new_message') {
                     // Add new message to state
                     setMessages(prev => [...prev, {
                         ...data.message,
-                        timestamp: new Date(data.message.timestamp)
+                        timestamp: new Date(data.message.timestamp) // Convert string back to Date
                     }]);
                 } else if (data.type === 'clear_history') {
                     if (data.session_id === sessionRef.current?.id) {
@@ -120,7 +133,7 @@ export default function Chat() {
                     }
                 }
             } catch (e) {
-                console.error("WS Parse Error", e);
+                console.error("WS Message Error", e);
             }
         };
 
@@ -135,6 +148,7 @@ export default function Chat() {
         };
 
         return () => {
+            clearInterval(pingInterval);
             ws.close();
         };
     }, [session]);

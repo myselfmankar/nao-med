@@ -17,9 +17,7 @@ Nao Medical Translator is a real-time, HIPAA-compliant communication platform de
 
 ## 🎥 Video Demo
 
-![Demo Video](https://placehold.co/600x400?text=App+Demo+Video+Coming+Soon)
-
-*(Link to your demo video here)*
+![Demo Video](https://github.com/user-attachments/assets/03c0beba-236a-41b1-bb33-c47949694c9a)
 
 ---
 
