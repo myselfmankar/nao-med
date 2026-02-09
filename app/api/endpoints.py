@@ -114,7 +114,6 @@ async def get_messages(session: ChatSession = Depends(get_current_session), db: 
     return result.scalars().all()
 
 @router.post("/chat", response_model=MessageResponse)
-@router.post("/chat", response_model=MessageResponse)
 async def send_message(
     message_data: MessageCreate, 
     session: ChatSession = Depends(get_current_session),
